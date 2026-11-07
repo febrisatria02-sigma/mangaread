@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0b0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Manga Reader</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LIBRARY VIEW ============ -->
+<div id="view-library" class="view active">
+  <header class="topbar">
+    <h1>Library</h1>
+    <div class="topbar-actions">
+      <button id="btn-import" class="btn-icon" title="Impor file">＋</button>
+      <button id="btn-settings" class="btn-icon" title="Pengaturan">⚙</button>
+    </div>
+  </header>
+
+  <div id="library-grid" class="grid"></div>
+
+  <div id="empty-state" class="empty">
+    <p class="empty-title">Belum ada komik</p>
+    <p class="empty-sub">Tekan <b>＋</b> untuk impor file .cbz / .zip<br>atau pilih banyak gambar sekaligus.</p>
+  </div>
+</div>
+
+<!-- ============ READER VIEW ============ -->
+<div id="view-reader" class="view">
+  <div id="reader-scroll" class="reader-scroll"></div>
+  <div id="reader-paged" class="reader-paged"></div>
+
+  <header id="reader-toolbar" class="reader-toolbar">
+    <button id="btn-back" class="btn-icon" title="Kembali">←</button>
+    <div class="reader-title">
+      <span id="rt-series"></span>
+      <small id="rt-chapter"></small>
+    </div>
+    <button id="btn-chapters" class="btn-icon" title="Daftar chapter">☰</button>
+  </header>
+
+  <footer id="reader-footer" class="reader-footer">
+    <button id="btn-prev-ch" class="btn-nav">‹ Chapter</button>
+    <div class="page-indicator"><span id="page-now">1</span> / <span id="page-total">1</span></div>
+    <button id="btn-next-ch" class="btn-nav">Chapter ›</button>
+  </footer>
+</div>
+
+<!-- ============ CHAPTER DRAWER ============ -->
+<div id="drawer" class="drawer">
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h2 id="drawer-title">Chapter</h2>
+      <button id="btn-drawer-close" class="btn-icon">✕</button>
+    </div>
+    <div id="chapter-list" class="chapter-list"></div>
+  </div>
+</div>
+
+<!-- ============ SETTINGS SHEET ============ -->
+<div id="settings" class="drawer">
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h2>Pengaturan</h2>
+      <button id="btn-settings-close" class="btn-icon">✕</button>
+    </div>
+    <div class="settings-body">
+      <label class="setting-row">
+        <span>Mode baca default</span>
+        <select id="set-mode">
+          <option value="webtoon">Webtoon (scroll)</option>
+          <option value="paged">Paged (per halaman)</option>
+        </select>
+      </label>
+      <label class="setting-row">
+        <span>Arah baca</span>
+        <select id="set-direction">
+          <option value="ltr">Kiri → Kanan</option>
+          <option value="rtl">Kanan → Kiri (manga)</option>
+        </select>
+      </label>
+      <label class="setting-row">
+        <span>Penyesuaian gambar</span>
+        <select id="set-fit">
+          <option value="width">Fit width</option>
+          <option value="height">Fit height</option>
+          <option value="original">Original</option>
+        </select>
+      </label>
+      <label class="setting-row">
+        <span>Lebar webtoon</span>
+        <input id="set-webtoon-width" type="range" min="60" max="100" step="5">
+      </label>
+      <div class="setting-row">
+        <span>Penyimpanan</span>
+        <button id="btn-clear-all" class="btn-danger">Hapus semua data</button>
+      </div>
+      <p class="setting-note">Semua data tersimpan lokal di HP ini. Tidak ada server, tidak ada tracking.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ IMPORT MODAL ============ -->
+<div id="import-modal" class="drawer">
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <h2>Impor</h2>
+      <button id="btn-import-close" class="btn-icon">✕</button>
+    </div>
+    <div class="settings-body">
+      <button id="btn-pick-archive" class="btn-primary">Pilih file .cbz / .zip</button>
+      <button id="btn-pick-images" class="btn-primary">Pilih gambar (bisa banyak)</button>
+      <label class="setting-row">
+        <span>Judul seri</span>
+        <input id="inp-series" type="text" placeholder="Nama seri">
+      </label>
+      <label class="setting-row">
+        <span>Nama chapter</span>
+        <input id="inp-chapter" type="text" placeholder="mis. Chapter 1">
+      </label>
+      <p class="setting-note">Kalau judul seri sama, chapter otomatis digabung ke seri yang ada.</p>
+    </div>
+  </div>
+</div>
+
+<input id="file-archive" type="file" accept=".cbz,.zip" multiple hidden>
+<input id="file-images" type="file" accept="image/*" multiple hidden>
+
+<div id="toast" class="toast"></div>
+
+<script src="vendor/jszip.min.js"></script>
+<script src="app.js"></script>
+<script src="reader.js"></script>
+<script>
+  // reader.js defines wireReader(); app.js boots the library.
+  // Wire the reader controls once the DOM is ready.
+  document.addEventListener('DOMContentLoaded', () => wireReader());
+</script>
+</body>
+</html>
